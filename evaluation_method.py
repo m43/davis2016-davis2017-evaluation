@@ -18,6 +18,8 @@ parser.add_argument('--davis_path', type=str, help='Path to the DAVIS folder con
 parser.add_argument('--set', type=str, help='Subset to evaluate the results', default='val')
 parser.add_argument('--task', type=str, help='Task to evaluate the results', default='unsupervised',
                     choices=['semi-supervised', 'unsupervised'])
+parser.add_argument("--year", type=str, help="Davis dataset year (default: 2017)", default='2017',
+                    choices=['2016', '2017', '2019'])
 parser.add_argument('--results_path', type=str, help='Path to the folder containing the sequences folders',
                     required=True)
 args, _ = parser.parse_known_args()
@@ -34,7 +36,7 @@ if os.path.exists(csv_name_global_path) and os.path.exists(csv_name_per_sequence
 else:
     print(f'Evaluating sequences for the {args.task} task...')
     # Create dataset and evaluate
-    dataset_eval = DAVISEvaluation(davis_root=args.davis_path, task=args.task, gt_set=args.set)
+    dataset_eval = DAVISEvaluation(davis_root=args.davis_path, task=args.task, gt_set=args.set, year=args.year)
     metrics_res = dataset_eval.evaluate(args.results_path)
     J, F = metrics_res['J'], metrics_res['F']
 
